@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+
+<title>Welcome, {{ user['uid'] }}</title>
+
+<ol>
+    {% for attr in user['attrs'] %}
+    <li>{{ attr }}</li>
+    {% endfor %}
+</ol>
+
+<label for="tables">Choose table to decrypt:</label>
+
+<form method="post">
+    <select name="tables" id="tables">
+        <option value="Bank">Bank</option>
+        <option value="Customer">Customer</option>
+        <option value="Branch">Branch</option>
+        <option value="Account">Account</option>
+        <option value="Card">Card</option>
+        <option value="TransactionLog">TransactionLog</option>
+    </select>
+    <input type="submit" value="Decrypt">
+</form>

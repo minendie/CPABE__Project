@@ -1,0 +1,59 @@
+version: '2'
+
+services:
+  attr-auth:
+    build: attr-auth
+    stdin_open: true
+    tty: true
+
+  cert-auth:
+    build: cert-auth
+
+  duser:
+    build: duser
+    ports:
+      - "5001:5001"
+    stdin_open: true
+    tty: true
+
+  #cloud:
+  #  build: cloud
+
+  log_node:
+    build: log_node
+  
+  database:
+    build: database
+    hostname: database
+    #restart: unless-stopped
+    ports:
+      - "1433:1433"
+    #volumes:
+      #- sqlvolume:/var/opt/mssql/data
+      #- sqlvolume/log:/var/opt/mssql/log
+    environment:
+      ACCEPT_EULA: "Y"
+      MSSQL_SA_PASSWORD: "Pa55w0rd"
+      MSSQL_PID: "Developer"
+      #MSSQL_DB: "crypto_db"
+      #MYSQL_DATABASE: crypto_db
+      #MYSQL_ROOT_PASSWORD: Pa$$w0rd
+      #MYSQL_USER: dung
+      #MYSQL_PASSWORD: Pa$$w0rd
+      #MYSQL_HOST: database
+      #MYSQL_TCP_PORT: 3307
+    #command: --default-authentication-plugin=mysql_native_password
+    #healthcheck:
+    #  test: ["CMD-SHELL", "/opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P Pa55w0rd -i db__.sql' || exit 1"]
+    #  interval: 10s
+    #  retries: 10
+    #  start_period: 10s
+    #  timeout: 3s
+
+  bank-server-app:
+    build: bank-server-app
+    depends_on: [cert-auth]
+    stdin_open: true
+    tty: true
+    ports:
+      - "5000:5000"
